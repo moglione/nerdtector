@@ -1,0 +1,115 @@
+﻿Version=6.5
+NumberOfModules=3
+Module1=StateManager
+Module2=detector
+Module3=Starter
+Build1=Default,ar.nerd.detector
+ManifestCode='This code will be applied to the manifest file during compilation.~\n~'You do not need to modify it in most cases.~\n~'See this link for for more information: http://www.b4x.com/forum/showthread.php?p=78136~\n~AddManifestText(~\n~<uses-sdk android:minSdkVersion="5" android:targetSdkVersion="19"/>~\n~<uses-permission android:name="android.permission.GET_ACCOUNTS" />~\n~<supports-screens android:largeScreens="true" ~\n~    android:normalScreens="true" ~\n~    android:smallScreens="true" ~\n~    android:anyDensity="true"/>)~\n~SetApplicationAttribute(android:icon, "@drawable/icon")~\n~SetApplicationAttribute(android:label, "$LABEL$")~\n~SetActivityAttribute(Main, android:screenOrientation, "landscape")~\n~SetActivityAttribute(detector, android:screenOrientation, "portrait")~\n~SetActivityAttribute(main, android:hardwareAccelerated, "true")~\n~'End of default text.~\n~
+IconFile=
+NumberOfFiles=12
+File1=about.png
+File2=aguja.png
+File3=cara.png
+File4=fondo.png
+File5=helvetica.ttf
+File6=mano1.png
+File7=mano2.png
+File8=off.png
+File9=on.png
+File10=placa.png
+File11=splash.png
+File12=tornillo.png
+NumberOfLibraries=8
+Library1=core
+Library2=phone
+Library3=animationplus
+Library4=audio
+Library5=reflection
+Library6=dialogs
+Library7=randomaccessfile
+Library8=httputils2
+@EndOfDesignText@
+#Region  Project Attributes 
+	#ApplicationLabel: Nerdtector
+	#VersionCode: 3
+	#VersionName: 1.04
+	'SupportedOrientations possible values: unspecified, landscape or portrait.
+	#SupportedOrientations: unspecified
+	#CanInstallToExternalStorage: False
+#End Region
+
+#Region  Activity Attributes 
+	#FullScreen: True
+	#IncludeTitle: False
+#End Region
+
+
+Sub Process_Globals
+	'These global variables will be declared once when the application starts.
+	'These variables can be accessed from all modules.
+     Dim splashDone As Boolean=False
+End Sub
+
+Sub Globals
+	'These global variables will be redeclared each time the activity is created.
+	'These variables can only be accessed from this module.
+    Dim tablet As Boolean=False
+	Dim telefono As Boolean=False
+	
+End Sub
+
+Sub Activity_Create(FirstTime As Boolean)
+	'Do not forget to load the layout file created with the visual designer. For example:
+	'Activity.LoadLayout("Layout1")
+	Dim lv As LayoutValues
+    Dim size As Float
+    lv = GetDeviceLayoutValues
+    size = lv.ApproximateScreenSize
+	
+'   Activity.SetBackgroundImage (LoadBitmap (File.DirAssets,"splash.png"))
+
+    
+    
+	
+	Sleep(50)
+	
+	'######################################################
+	'si el tamño es de menos de 7 pulgadas es un telefono
+	'de lo contrario es una tablet
+	'######################################################
+	
+	If size < 7 Then telefono=True
+	If size >= 7 Then tablet=True 
+	
+	
+	If FirstTime Then
+       
+	   If telefono Then StartActivity(detector)
+	   If tablet Then StartActivity(detector)
+	   splashDone=True
+	Else
+	   If splashDone And telefono Then  StartActivity(detector)
+	    If splashDone And tablet Then  StartActivity(detector)
+	End If
+	
+	
+
+End Sub
+
+Sub Activity_Resume
+     If splashDone Then Activity.Finish
+End Sub
+
+Sub Activity_Pause (UserClosed As Boolean)
+
+End Sub
+
+
+Sub Sleep(ms As Long)
+Dim now As Long
+   If ms > 1000 Then ms =1000   
+   now=DateTime.now
+   Do Until (DateTime.now>now+ms)
+     DoEvents
+   Loop
+End Sub
